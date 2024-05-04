@@ -1,0 +1,17 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select News Categories</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Select Your Favorite News Categories</h1>
+    <form action="/" method="post">
+        {% for category in categories %}
+        <input type="checkbox" name="category" value="{{ category }}">{{ category }}<br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

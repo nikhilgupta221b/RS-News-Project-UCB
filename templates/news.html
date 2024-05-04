@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommended News</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>News Recommendations</h1>
+    {% for article, category in news_list %}
+    <div class="news-item">
+        <h2>{{ article }}</h2> <div class="category-box">
+            <p>{{ category }}</p>
+        </div>
+        <div class="button-wrapper">
+            <button id="like-{{ loop.index }}" class="like-btn" onclick="updatePreference('{{ category }}', 'like', 'like-{{ loop.index }}', 'dislike-{{ loop.index }}')">Like</button>
+            <button id="dislike-{{ loop.index }}" class="dislike-btn" onclick="updatePreference('{{ category }}', 'dislike', 'like-{{ loop.index }}', 'dislike-{{ loop.index }}')">Dislike</button>
+       </div>
+    </div>
+    {% endfor %}
+    <button onclick="location.href='/news'">Refresh News</button>
+
+    <script>
+        function updatePreference(category, outcome, likeId, dislikeId) {
+            $.post("/update_preference", {
+                category: category,
+                outcome: outcome
+            }, function(data) {
+                // Disable both buttons
+                $("#" + likeId).prop('disabled', true);
+                $("#" + dislikeId).prop('disabled', true);
+                // Change text and color of the clicked button
+                if (outcome === 'like') {
+                    $("#" + likeId).text('Liked').removeClass('like-btn').addClass('liked-btn');
+                } else {
+                    $("#" + dislikeId).text('Disliked').removeClass('dislike-btn').addClass('liked-btn');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
